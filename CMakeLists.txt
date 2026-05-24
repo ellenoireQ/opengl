@@ -15,6 +15,14 @@ set(SOURCES
     ${TARGET}
     glad/src/glad.c
     utils/get_vertex_data.cpp
+    gui/main_gui.cpp
+
+    imgui/imgui.cpp
+    imgui/imgui_draw.cpp
+    imgui/imgui_widgets.cpp
+    imgui/imgui_tables.cpp
+    imgui/backends/imgui_impl_glfw.cpp
+    imgui/backends/imgui_impl_opengl3.cpp
 )
 
 find_package(glfw3 REQUIRED)
@@ -24,6 +32,9 @@ add_executable(my_app ${SOURCES})
 target_include_directories(my_app PRIVATE
     glad/include
     utils/
+    ./
+    ./imgui
+    ./imgui/backends
 )
 
 # Compile flags
