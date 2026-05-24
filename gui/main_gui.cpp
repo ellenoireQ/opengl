@@ -1,13 +1,61 @@
 #include "main_gui.hpp"
+#include "imgui.h"
 
 static float myFloat = 0.5f;
 
 void GUI::app() {
-  ImGui::Text("Hello, world %d", 123);
-  if (ImGui::Button("Save")) {
-    // Button clicked
+  static float color[3] = {0.2f, 0.6f, 1.0f};
+
+  ImGui::Text("OpenGL Control Panel");
+  ImGui::Separator();
+
+  if (ImGui::Button("Save Config")) {
+    // save config
   }
-  ImGui::SliderFloat("float", &myFloat, 0.0f, 1.0f);
+
+  ImGui::Spacing();
+
+  if (ImGui::BeginTable("rgb_table", 2, ImGuiTableFlags_SizingStretchSame)) {
+    // ===== R =====
+    ImGui::TableNextColumn();
+    ImGui::Text("Red");
+
+    ImGui::TableNextColumn();
+    ImGui::PushItemWidth(-1);
+    ImGui::SliderFloat("##R", &color[0], 0.0f, 1.0f);
+    ImGui::PopItemWidth();
+
+    // ===== G =====
+    ImGui::TableNextRow();
+
+    ImGui::TableNextColumn();
+    ImGui::Text("Green");
+
+    ImGui::TableNextColumn();
+    ImGui::PushItemWidth(-1);
+    ImGui::SliderFloat("##G", &color[1], 0.0f, 1.0f);
+    ImGui::PopItemWidth();
+
+    // ===== B =====
+    ImGui::TableNextRow();
+
+    ImGui::TableNextColumn();
+    ImGui::Text("Blue");
+
+    ImGui::TableNextColumn();
+    ImGui::PushItemWidth(-1);
+    ImGui::SliderFloat("##B", &color[2], 0.0f, 1.0f);
+    ImGui::PopItemWidth();
+
+    ImGui::EndTable();
+  }
+
+  ImGui::Spacing();
+
+  // Preview warna
+  ImGui::Text("Preview");
+  ImGui::ColorButton("##preview", ImVec4(color[0], color[1], color[2], 1.0f),
+                     ImGuiColorEditFlags_NoTooltip, ImVec2(200, 50));
 }
 
 void GUI::GuiInit(GLFWwindow *window) {
