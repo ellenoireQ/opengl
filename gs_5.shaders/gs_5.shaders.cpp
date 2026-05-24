@@ -36,19 +36,8 @@ int main() {
 
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-  // Setup Dear ImGui context
-  IMGUI_CHECKVERSION();
-  ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
-  (void)io;
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-
-  // Setup Dear ImGui style
-  ImGui::StyleColorsDark();
-
-  // Setup Platform/Renderer backends
-  ImGui_ImplGlfw_InitForOpenGL(window, true);
-  ImGui_ImplOpenGL3_Init("#version 330");
+  // Initialize gui
+  GUI::GuiInit(window);
 
   // Vertex shader source
   std::string vertexShaderSource =
@@ -141,20 +130,11 @@ int main() {
     // input
     processInput(window);
 
-    // Start ImGui frame
-    ImGui::SetNextWindowSize(ImVec2(400, 300), ImGuiCond_FirstUseEver);
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-
-    // Call your GUI
-    app();
-
     // rendering code
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Draw rectangle
+    // Draw triangle
     glUseProgram(shaderProgram);
 
     float timeValue = glfwGetTime();
@@ -165,9 +145,8 @@ int main() {
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
-    // Render ImGui
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    // Draw ImGui
+    GUI::Draw();
 
     // buffer
     glfwSwapBuffers(window);
@@ -175,9 +154,7 @@ int main() {
   }
 
   // Cleanup ImGui
-  ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext();
+  GUI::Destroy();
 
   // Cleanup
   glDeleteVertexArrays(1, &VAO);

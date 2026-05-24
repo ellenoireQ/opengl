@@ -1,7 +1,21 @@
 #ifndef MAIN_GUI_HPP
 #define MAIN_GUI_HPP
+#include <imgui/backends/imgui_impl_glfw.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/imgui.h>
 
-void app();
+class GUI {
+public:
+  //
+  // Initialize Graphical User Interface
+  //
+  static void GuiInit(GLFWwindow *window);
+
+  static void Draw();
+
+  static void app();
+
+  static void Destroy();
+};
 
 #endif // MAIN_GUI_HPP
