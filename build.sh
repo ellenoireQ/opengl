@@ -56,18 +56,24 @@ build_chapter() {
   cd build
 
   # Generate CMake with selected target file
-  cmake .. -DTARGET="$cpp_file" >/dev/null 2>&1
+  echo -e "${BLUE}Configuring CMake...${NC}"
+  cmake_output=$(cmake .. -DTARGET="$cpp_file" 2>&1)
+  cmake_exit=$?
 
-  if [ $? -ne 0 ]; then
+  if [ $cmake_exit -ne 0 ]; then
     echo -e "${RED}CMake configuration failed for $chapter_name${NC}"
+    echo -e "${RED}Errors:${NC}"
+    echo "$cmake_output" | grep -i "error\|fatal\|CMake Error"
     cd ..
     return 1
   fi
 
   # Build
-  cmake --build . >/dev/null 2>&1
+  echo -e "${BLUE}Compiling...${NC}"
+  build_output=$(cmake --build . 2>&1)
+  build_exit=$?
 
-  if [ $? -eq 0 ]; then
+  if [ $build_exit -eq 0 ]; then
     echo -e "${GREEN}✓ $chapter_name built successfully${NC}"
     # Rename executable
     mv my_app "${chapter_name}" 2>/dev/null
@@ -84,6 +90,8 @@ build_chapter() {
     return 0
   else
     echo -e "${RED}✗ Build failed for $chapter_name${NC}"
+    echo -e "${RED}Compilation errors:${NC}"
+    echo "$build_output" | grep -E "error:|warning:|undefined reference|fatal error"
     cd ..
     return 1
   fi
