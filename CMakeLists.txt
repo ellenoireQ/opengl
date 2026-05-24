@@ -14,6 +14,7 @@ endif()
 set(SOURCES
     ${TARGET}
     glad/src/glad.c
+    utils/get_vertex_data.cpp
 )
 
 find_package(glfw3 REQUIRED)
@@ -22,6 +23,7 @@ add_executable(my_app ${SOURCES})
 
 target_include_directories(my_app PRIVATE
     glad/include
+    utils/
 )
 
 # Compile flags
