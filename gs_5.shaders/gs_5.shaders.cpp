@@ -137,16 +137,15 @@ int main() {
     // Draw triangle
     glUseProgram(shaderProgram);
 
-    float timeValue = glfwGetTime();
-    float greenValue = sin(timeValue) / 2.0f + 0.5f;
-    int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-    glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+    // Update vertex buffer with new color data
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
 
     // Draw ImGui
-    GUI::Draw();
+    GUI::Draw(vertices);
 
     // buffer
     glfwSwapBuffers(window);

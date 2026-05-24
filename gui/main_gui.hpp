@@ -11,9 +11,9 @@ public:
   //
   static void GuiInit(GLFWwindow *window);
 
-  static void Draw();
+  static void Draw(float matrix[]);
 
-  static void app();
+  static void app(float matrix[]);
 
   static void Destroy();
 };

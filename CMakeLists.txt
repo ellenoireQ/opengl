@@ -15,6 +15,7 @@ set(SOURCES
     ${TARGET}
     glad/src/glad.c
     utils/get_vertex_data.cpp
+    utils/utility.cpp
     gui/main_gui.cpp
 
     imgui/imgui.cpp

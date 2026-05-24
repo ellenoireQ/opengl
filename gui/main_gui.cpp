@@ -1,19 +1,21 @@
 #include "main_gui.hpp"
 #include "imgui.h"
+#include <utils/utility.hpp>
 
 static float myFloat = 0.5f;
 
-void GUI::app() {
+void GUI::app(float matrix[]) {
   static float color[3] = {0.2f, 0.6f, 1.0f};
 
   ImGui::Text("OpenGL Control Panel");
   ImGui::Separator();
 
   if (ImGui::Button("Save Config")) {
-    // save config
+    //
   }
 
   ImGui::Spacing();
+  setColorByMatrix(matrix, color[0], color[1], color[2]);
 
   if (ImGui::BeginTable("rgb_table", 2, ImGuiTableFlags_SizingStretchSame)) {
     // ===== R =====
@@ -74,7 +76,7 @@ void GUI::GuiInit(GLFWwindow *window) {
   ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-void GUI::Draw() {
+void GUI::Draw(float matrix[]) {
   // Start new ImGui frame
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -82,7 +84,7 @@ void GUI::Draw() {
 
   // Create a window
   ImGui::Begin("Control Panel");
-  app();
+  app(matrix);
   ImGui::End();
 
   // Render ImGui
