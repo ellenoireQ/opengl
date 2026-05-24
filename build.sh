@@ -39,6 +39,7 @@ fi
 build_chapter() {
   local chapter_dir=$1
   local chapter_name=$(basename "$chapter_dir")
+  local should_run=$2
 
   echo -e "\n${GREEN}Building $chapter_name...${NC}"
 
@@ -70,6 +71,15 @@ build_chapter() {
     echo -e "${GREEN}✓ $chapter_name built successfully${NC}"
     # Rename executable
     mv my_app "${chapter_name}" 2>/dev/null
+    
+    # Run if requested
+    if [ "$should_run" = "true" ]; then
+      echo -e "${BLUE}Running $chapter_name...${NC}\n"
+      ./"${chapter_name}"
+      local exit_code=$?
+      echo -e "\n${BLUE}Program exited with code: $exit_code${NC}"
+    fi
+    
     cd ..
     return 0
   else
@@ -86,7 +96,7 @@ if [ "$choice" -eq 0 ]; then
   failed=0
 
   for chapter in "${chapters[@]}"; do
-    if build_chapter "$chapter"; then
+    if build_chapter "$chapter" "false"; then
       ((success++))
     else
       ((failed++))
@@ -96,11 +106,8 @@ if [ "$choice" -eq 0 ]; then
   echo -e "\n${BLUE}=== Build Results ===${NC}"
   echo -e "${GREEN}Success: $success${NC}"
   echo -e "${RED}Failed: $failed${NC}"
+  echo -e "\n${BLUE}Executables are in build/ folder${NC}"
 else
   selected_chapter="${chapters[$((choice - 1))]}"
-  build_chapter "$selected_chapter"
+  build_chapter "$selected_chapter" "true"
 fi
-
-echo -e "\n${BLUE}Executables are in build/ folder${NC}"
-
-exec "build/${chapter_name}"
