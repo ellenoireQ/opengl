@@ -48,7 +48,7 @@ void GUI::app(float matrix[]) {
 
     ImGui::TableNextColumn();
     ImGui::PushItemWidth(-1);
-    ImGui::SliderFloat("##R", &color[0], 0.0f, 1.0f);
+    ImGui::SliderFloat("##R", &color[0], -100.0f, 100.0f);
     ImGui::PopItemWidth();
 
     // ===== G =====
@@ -59,7 +59,7 @@ void GUI::app(float matrix[]) {
 
     ImGui::TableNextColumn();
     ImGui::PushItemWidth(-1);
-    ImGui::SliderFloat("##G", &color[1], 0.0f, 1.0f);
+    ImGui::SliderFloat("##G", &color[1], -100.0f, 100.0f);
     ImGui::PopItemWidth();
 
     // ===== B =====
@@ -70,7 +70,7 @@ void GUI::app(float matrix[]) {
 
     ImGui::TableNextColumn();
     ImGui::PushItemWidth(-1);
-    ImGui::SliderFloat("##B", &color[2], 0.0f, 1.0f);
+    ImGui::SliderFloat("##B", &color[2], -100.0f, 100.0f);
     ImGui::PopItemWidth();
 
     ImGui::EndTable();
