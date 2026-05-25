@@ -54,7 +54,7 @@ void GUI::app(float matrix[]) {
 
   ImGui::Spacing();
 
-  // Preview warna
+  // Preview color
   ImGui::Text("Preview");
   ImGui::ColorButton("##preview", ImVec4(color[0], color[1], color[2], 1.0f),
                      ImGuiColorEditFlags_NoTooltip, ImVec2(200, 50));
