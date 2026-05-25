@@ -4,9 +4,9 @@
 #include <utils/utility.hpp>
 
 static float myFloat = 0.5f;
-static float size[9] = {0.5f, -0.5f, 0.0f,  // vertex 1: x, y, z
-                        -0.5f, -0.5f, 0.0f, // vertex 2: x, y, z  
-                        0.0f, 0.5f, 0.0f};  // vertex 3: x, y, z
+static float size[9] = {0.5f,  -0.5f, 0.0f,  // vertex 1: x, y, z
+                        -0.5f, -0.5f, 0.0f,  // vertex 2: x, y, z
+                        0.0f,  0.5f,  0.0f}; // vertex 3: x, y, z
 
 void GUI::app(float matrix[]) {
   static float color[3] = {0.2f, 0.6f, 1.0f};
@@ -30,7 +30,7 @@ void GUI::app(float matrix[]) {
       ImGui::PushItemWidth(-1);
       char label[16];
       snprintf(label, sizeof(label), "##Size%d", i);
-      ImGui::SliderFloat(label, &size[i], 0.0f, 1.0f);
+      ImGui::SliderFloat(label, &size[i], -10.0f, 10.0f);
       ImGui::PopItemWidth();
 
       if (i < 8)
@@ -122,6 +122,4 @@ void GUI::Destroy() {
   ImGui::DestroyContext();
 }
 
-const float* GUI::getSizeArray() {
-  return size;
-}
+const float *GUI::getSizeArray() { return size; }
