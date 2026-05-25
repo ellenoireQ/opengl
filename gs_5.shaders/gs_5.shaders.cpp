@@ -45,12 +45,16 @@ int main() {
   std::string fragmentShaderSource =
       get_vertex_data("../gs_5.shaders/fragment.glsl");
 
-  float vertices[] = {
-      // positions         // colors
-      0.5f,  -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
-      -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom left
-      0.0f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f  // top
-  };
+  // Get updated size values from GUI
+    const float* sizeArray = GUI::getSizeArray();
+    
+    // Update vertices with GUI size values
+    float vertices[] = {
+        // positions                              // colors
+        sizeArray[0], sizeArray[1], sizeArray[2], 1.0f, 0.0f, 0.0f, // bottom right
+        sizeArray[3], sizeArray[4], sizeArray[5], 0.0f, 1.0f, 0.0f, // bottom left
+        sizeArray[6], sizeArray[7], sizeArray[8], 0.0f, 0.0f, 1.0f  // top
+    };
 
   // Create VAO, VBO, and EBO
   unsigned int VAO, VBO, EBO;
@@ -137,7 +141,7 @@ int main() {
     // Draw triangle
     glUseProgram(shaderProgram);
 
-    // Update vertex buffer with new color data
+    // Update vertex buffer with new position data
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
 

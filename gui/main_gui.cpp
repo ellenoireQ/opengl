@@ -1,8 +1,12 @@
 #include "main_gui.hpp"
 #include "imgui.h"
+#include <cstdio>
 #include <utils/utility.hpp>
 
 static float myFloat = 0.5f;
+static float size[9] = {0.5f, -0.5f, 0.0f,  // vertex 1: x, y, z
+                        -0.5f, -0.5f, 0.0f, // vertex 2: x, y, z  
+                        0.0f, 0.5f, 0.0f};  // vertex 3: x, y, z
 
 void GUI::app(float matrix[]) {
   static float color[3] = {0.2f, 0.6f, 1.0f};
@@ -16,6 +20,26 @@ void GUI::app(float matrix[]) {
 
   ImGui::Spacing();
   setColorByMatrix(matrix, color[0], color[1], color[2]);
+  setSize(matrix, size);
+  if (ImGui::BeginTable("size_table", 2, ImGuiTableFlags_SizingStretchSame)) {
+    for (int i = 0; i < 9; i++) {
+      ImGui::TableNextColumn();
+      ImGui::Text("%d", i + 1);
+
+      ImGui::TableNextColumn();
+      ImGui::PushItemWidth(-1);
+      char label[16];
+      snprintf(label, sizeof(label), "##Size%d", i);
+      ImGui::SliderFloat(label, &size[i], 0.0f, 1.0f);
+      ImGui::PopItemWidth();
+
+      if (i < 8)
+        ImGui::TableNextRow();
+    }
+    ImGui::EndTable();
+  }
+
+  ImGui::Spacing();
 
   if (ImGui::BeginTable("rgb_table", 2, ImGuiTableFlags_SizingStretchSame)) {
     // ===== R =====
@@ -96,4 +120,8 @@ void GUI::Destroy() {
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
+}
+
+const float* GUI::getSizeArray() {
+  return size;
 }

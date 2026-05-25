@@ -16,6 +16,9 @@ public:
   static void app(float matrix[]);
 
   static void Destroy();
+
+  // Get the size array values
+  static const float* getSizeArray();
 };
 
 #endif // MAIN_GUI_HPP
