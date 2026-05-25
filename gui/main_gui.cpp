@@ -15,31 +15,11 @@ void GUI::app(float matrix[])
     if (ImGui::BeginTabItem("Color"))
     {
       static float color[3] = {0.2f, 0.6f, 1.0f};
-
-      ImGui::Spacing();
       setColorByMatrix(matrix, color[0], color[1], color[2]);
-      setSize(matrix, size);
-      if (ImGui::BeginTable("size_table", 2, ImGuiTableFlags_SizingStretchSame))
-      {
-        for (int i = 0; i < 9; i++)
-        {
-          ImGui::TableNextColumn();
-          ImGui::Text("%d", i + 1);
-
-          ImGui::TableNextColumn();
-          ImGui::PushItemWidth(-1);
-          char label[16];
-          snprintf(label, sizeof(label), "##Size%d", i);
-          ImGui::SliderFloat(label, &size[i], -10.0f, 10.0f);
-          ImGui::PopItemWidth();
-
-          if (i < 8)
-            ImGui::TableNextRow();
-        }
-        ImGui::EndTable();
-      }
 
       ImGui::Spacing();
+      ImGui::Text("RGB Manipulation");
+      ImGui::Separator();
 
       if (ImGui::BeginTable("rgb_table", 2, ImGuiTableFlags_SizingStretchSame))
       {
@@ -85,10 +65,32 @@ void GUI::app(float matrix[])
                          ImGuiColorEditFlags_NoTooltip, ImVec2(200, 50));
       ImGui::EndTabItem();
     }
-    if (ImGui::BeginTabItem("Tab 2"))
+    if (ImGui::BeginTabItem("Texture"))
     {
-      ImGui::Text("This is content for Tab 2");
-      ImGui::EndTabItem();
+      ImGui::Spacing();
+      ImGui::Text("Matrix Manipulation");
+      ImGui::Separator();
+      setSize(matrix, size);
+      if (ImGui::BeginTable("size_table", 2, ImGuiTableFlags_SizingStretchSame))
+      {
+        for (int i = 0; i < 9; i++)
+        {
+          ImGui::TableNextColumn();
+          ImGui::Text("%d", i + 1);
+
+          ImGui::TableNextColumn();
+          ImGui::PushItemWidth(-1);
+          char label[16];
+          snprintf(label, sizeof(label), "##Size%d", i);
+          ImGui::SliderFloat(label, &size[i], -10.0f, 10.0f);
+          ImGui::PopItemWidth();
+
+          if (i < 8)
+            ImGui::TableNextRow();
+        }
+        ImGui::EndTable();
+        ImGui::EndTabItem();
+      }
     }
     ImGui::EndTabBar();
   }
