@@ -31,9 +31,9 @@ int main() {
 
   // Vertex shader source
   std::string vertexShaderSource =
-      get_vertex_data("../gs_4.hello_triangle/vertex.glsl");
+      get_vertex_data("gs_4.hello_triangle/vertex.glsl");
   std::string fragmentShaderSource =
-      get_vertex_data("../gs_4.hello_triangle/fragment.glsl");
+      get_vertex_data("gs_4.hello_triangle/fragment.glsl");
 
   // Vertex data for a rectangle (4 vertices)
   float vertices[] = {

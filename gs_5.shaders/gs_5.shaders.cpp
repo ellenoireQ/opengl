@@ -41,9 +41,9 @@ int main() {
 
   // Vertex shader source
   std::string vertexShaderSource =
-      get_vertex_data("../gs_5.shaders/vertex.glsl");
+      get_vertex_data("gs_5.shaders/vertex.glsl");
   std::string fragmentShaderSource =
-      get_vertex_data("../gs_5.shaders/fragment.glsl");
+      get_vertex_data("gs_5.shaders/fragment.glsl");
 
   // Get updated size values from GUI
     const float* sizeArray = GUI::getSizeArray();
