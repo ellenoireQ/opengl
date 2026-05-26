@@ -17,6 +17,7 @@ set(SOURCES
     utils/get_vertex_data.cpp
     utils/utility.cpp
     gui/main_gui.cpp
+    gs_999.main/class/mesh.cpp
 
     imgui/imgui.cpp
     imgui/imgui_draw.cpp
@@ -42,6 +43,8 @@ target_include_directories(my_app PRIVATE
     ./imgui
     ./imgui/backends
     glfw-3.4.bin/include/
+    gs_999.main/class
+
 )
 
 if(WIN32)

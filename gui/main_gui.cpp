@@ -4,32 +4,34 @@
 #include <utils/utility.hpp>
 
 static float myFloat = 0.5f;
-static float size[9] = {0.5f, -0.5f, 0.0f,  // vertex 1: x, y, z
-                        -0.5f, -0.5f, 0.0f, // vertex 2: x, y, z
-                        0.0f, 0.5f, 0.0f};  // vertex 3: x, y, z
+static float color[3] = {0.2f, 0.6f, 1.0f};
+static float size[9] = {0.5f,  -0.5f, 0.0f,  // vertex 1: x, y, z
+                        -0.5f, -0.5f, 0.0f,  // vertex 2: x, y, z
+                        0.0f,  0.5f,  0.0f}; // vertex 3: x, y, z
 
-void GUI::app(float matrix[])
-{
-  if (ImGui::BeginTabBar("AppTable"))
-  {
-    if (ImGui::BeginTabItem("Color"))
-    {
-      static float color[3] = {0.2f, 0.6f, 1.0f};
+void GUI::app(float matrix[]) {
+  if (ImGui::BeginTabBar("AppTable")) {
+    if (ImGui::BeginTabItem("Mesh")) {
+      ImGui::Text("Mesh");
+      ImGui::EndTabItem();
+    }
+
+    if (ImGui::BeginTabItem("Color")) {
       setColorByMatrix(matrix, color[0], color[1], color[2]);
 
       ImGui::Spacing();
       ImGui::Text("RGB Manipulation");
       ImGui::Separator();
 
-      if (ImGui::BeginTable("rgb_table", 2, ImGuiTableFlags_SizingStretchSame))
-      {
+      if (ImGui::BeginTable("rgb_table", 2,
+                            ImGuiTableFlags_SizingStretchSame)) {
         // ===== R =====
         ImGui::TableNextColumn();
         ImGui::Text("Red");
 
         ImGui::TableNextColumn();
         ImGui::PushItemWidth(-1);
-        ImGui::SliderFloat("##R", &color[0], -100.0f, 100.0f);
+        ImGui::SliderFloat("##R", &color[0], -10.0f, 10.0f);
         ImGui::PopItemWidth();
 
         // ===== G =====
@@ -40,7 +42,7 @@ void GUI::app(float matrix[])
 
         ImGui::TableNextColumn();
         ImGui::PushItemWidth(-1);
-        ImGui::SliderFloat("##G", &color[1], -100.0f, 100.0f);
+        ImGui::SliderFloat("##G", &color[1], -10.0f, 10.0f);
         ImGui::PopItemWidth();
 
         // ===== B =====
@@ -51,7 +53,7 @@ void GUI::app(float matrix[])
 
         ImGui::TableNextColumn();
         ImGui::PushItemWidth(-1);
-        ImGui::SliderFloat("##B", &color[2], -100.0f, 100.0f);
+        ImGui::SliderFloat("##B", &color[2], -10.0f, 10.0f);
         ImGui::PopItemWidth();
 
         ImGui::EndTable();
@@ -61,20 +63,19 @@ void GUI::app(float matrix[])
 
       // Preview color
       ImGui::Text("Preview");
-      ImGui::ColorButton("##preview", ImVec4(color[0], color[1], color[2], 1.0f),
+      ImGui::ColorButton("##preview",
+                         ImVec4(color[0], color[1], color[2], 1.0f),
                          ImGuiColorEditFlags_NoTooltip, ImVec2(200, 50));
       ImGui::EndTabItem();
     }
-    if (ImGui::BeginTabItem("Texture"))
-    {
+    if (ImGui::BeginTabItem("Texture")) {
       ImGui::Spacing();
       ImGui::Text("Matrix Manipulation");
       ImGui::Separator();
       setSize(matrix, size);
-      if (ImGui::BeginTable("size_table", 2, ImGuiTableFlags_SizingStretchSame))
-      {
-        for (int i = 0; i < 9; i++)
-        {
+      if (ImGui::BeginTable("size_table", 2,
+                            ImGuiTableFlags_SizingStretchSame)) {
+        for (int i = 0; i < 9; i++) {
           ImGui::TableNextColumn();
           ImGui::Text("%d", i + 1);
 
@@ -96,8 +97,7 @@ void GUI::app(float matrix[])
   }
 }
 
-void GUI::GuiInit(GLFWwindow *window)
-{
+void GUI::GuiInit(GLFWwindow *window) {
   // Setup Dear ImGui context
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
@@ -113,8 +113,7 @@ void GUI::GuiInit(GLFWwindow *window)
   ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-void GUI::Draw(float matrix[])
-{
+void GUI::Draw(float matrix[]) {
   // Start new ImGui frame
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -130,11 +129,12 @@ void GUI::Draw(float matrix[])
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void GUI::Destroy()
-{
+void GUI::Destroy() {
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
 }
 
 const float *GUI::getSizeArray() { return size; }
+
+const float *GUI::getColorArray() { return color; }

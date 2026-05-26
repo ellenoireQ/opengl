@@ -4,7 +4,8 @@
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/imgui.h>
 
-class GUI {
+class GUI
+{
 public:
   //
   // Initialize Graphical User Interface
@@ -18,7 +19,10 @@ public:
   static void Destroy();
 
   // Get the size array values
-  static const float* getSizeArray();
+  static const float *getSizeArray();
+
+  // Get the color array values
+  static const float *getColorArray();
 };
 
 #endif // MAIN_GUI_HPP
