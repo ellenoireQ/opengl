@@ -59,6 +59,28 @@ function Build-Chapter {
         [bool]$ShouldRun
     )
 
+    function Write-ErrorSummary {
+        param(
+            [Parameter(Mandatory = $true)]
+            [object[]]$Output,
+            [Parameter(Mandatory = $true)]
+            [string]$Header
+        )
+
+        Write-Host $Header -ForegroundColor Red
+
+        $lines = $Output | ForEach-Object { $_.ToString() }
+        $errorLines = $lines | Select-String -Pattern 'CMake Error|\berror\b|\bfatal\b|\bfailed\b|undefined reference|LNK\d+' -CaseSensitive:$false | ForEach-Object { $_.Line }
+
+        if ($errorLines -and $errorLines.Count -gt 0) {
+            $errorLines | ForEach-Object { Write-Host $_ }
+            return
+        }
+
+        Write-Host 'No filtered error lines found. Showing full command output:' -ForegroundColor Yellow
+        $lines | ForEach-Object { Write-Host $_ }
+    }
+
     $chapterName = $Chapter.Name
     Write-Host ''
     Write-Host ("Building {0}..." -f $chapterName) -ForegroundColor Green
@@ -72,13 +94,12 @@ function Build-Chapter {
     New-Item -ItemType Directory -Path $buildDir -Force | Out-Null
 
     Write-Host 'Configuring CMake...' -ForegroundColor Cyan
-    $cmakeOutput = & cmake -S $root -B $buildDir "-DTARGET=$($cppFile.FullName)" 2>&1
+    $cmakeOutput = & cmake -G Ninja -S $root -B $buildDir "-DTARGET=$($cppFile.FullName)" 2>&1
     $cmakeExit = $LASTEXITCODE
 
     if ($cmakeExit -ne 0) {
         Write-Host ("CMake configuration failed for {0}" -f $chapterName) -ForegroundColor Red
-        Write-Host 'Errors:' -ForegroundColor Red
-        $cmakeOutput | Select-String -Pattern 'error|fatal|CMake Error' -CaseSensitive:$false | ForEach-Object { $_.Line }
+        Write-ErrorSummary -Output $cmakeOutput -Header 'Configuration output:'
         if ($LASTEXITCODE -ne 0) {
             $null = $LASTEXITCODE
         }
@@ -91,8 +112,7 @@ function Build-Chapter {
 
     if ($buildExit -ne 0) {
         Write-Host ("Build failed for {0}" -f $chapterName) -ForegroundColor Red
-        Write-Host 'Compilation errors:' -ForegroundColor Red
-        $buildOutput | Select-String -Pattern 'error:|warning:|undefined reference|fatal error' -CaseSensitive:$false | ForEach-Object { $_.Line }
+        Write-ErrorSummary -Output $buildOutput -Header 'Build output:'
         if ($LASTEXITCODE -ne 0) {
             $null = $LASTEXITCODE
         }
