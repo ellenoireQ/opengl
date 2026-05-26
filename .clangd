@@ -1,0 +1,15 @@
+CompileFlags:
+  CompilationDatabase: build
+  Add:
+    - -IC:/msys64/ucrt64/include/c++/16.1.0
+    - -IC:/msys64/ucrt64/include/c++/16.1.0/x86_64-w64-mingw32
+    - -IC:/msys64/ucrt64/include
+    - -target
+    - x86_64-w64-mingw32
+    - -D__GNUC__=16
+    - -D__GNUC_MINOR__=1
+  Compiler: C:/msys64/ucrt64/bin/g++.exe
+
+Diagnostics:
+  UnusedIncludes: None
+  MissingIncludes: None
