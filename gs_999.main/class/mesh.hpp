@@ -9,12 +9,11 @@
 #include <string>
 #include <vector>
 
-static const float *sizeArray = GUI::getSizeArray();
 static float vertices[] = {
     // positions                              // colors
-    sizeArray[0], sizeArray[1], sizeArray[2], 1.0f, 0.0f, 0.0f, // bottom right
-    sizeArray[3], sizeArray[4], sizeArray[5], 0.0f, 1.0f, 0.0f, // bottom left
-    sizeArray[6], sizeArray[7], sizeArray[8], 0.0f, 0.0f, 1.0f  // top
+    0.5f,  -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
+    -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom left
+    0.0f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f  // top
 };
 
 void updateVerticesFromGui();
@@ -30,6 +29,9 @@ struct MeshStructure
 
   unsigned int VAO, VBO, EBO;
   unsigned int shaderProgram;
+  
+  // Each mesh stores its own vertex data
+  float vertices[18]; // 3 vertices * 6 floats (3 pos + 3 color)
 };
 
 struct MeshContainer

@@ -8,6 +8,7 @@ void updateVerticesFromGui()
 {
   const float *currentSize = GUI::getSizeArray();
   const float *currentColor = GUI::getColorArray();
+
   vertices[0] = currentSize[0];
   vertices[1] = currentSize[1];
   vertices[2] = currentSize[2];
@@ -37,7 +38,8 @@ bool Mesh::init(MeshStructure &msh)
 
   // Bind and set VBO
   glBindBuffer(GL_ARRAY_BUFFER, msh.VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(msh.vertices), msh.vertices,
+               GL_STATIC_DRAW);
 
   // Configure vertex attributes
   // position attribute
@@ -133,23 +135,38 @@ void Mesh::insertNew()
       .VBO = 0,
       .EBO = 0,
   };
+
+  // Copy current vertices data to this mesh
+  updateVerticesFromGui();
+  for (int i = 0; i < 18; i++)
+  {
+    block.vertices[i] = vertices[i];
+  }
+
   if (init(block))
   {
     container.mesh_block.push_back(block);
+    std::cout << "Mesh spawned! Total meshes: " << container.mesh_block.size()
+              << std::endl;
   }
 }
 
 void Mesh::draw()
 {
   updateVerticesFromGui();
-  for (auto &msh : container.mesh_block)
+
+  for (size_t i = 0; i < container.mesh_block.size(); i++)
   {
+    auto &msh = container.mesh_block[i];
+
     // Draw triangle
     glUseProgram(msh.shaderProgram);
 
-    // Update vertex buffer with new position data
-    glBindBuffer(GL_ARRAY_BUFFER, msh.VBO);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+    if (i == 0)
+    {
+      glBindBuffer(GL_ARRAY_BUFFER, msh.VBO);
+      glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+    }
 
     glBindVertexArray(msh.VAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
