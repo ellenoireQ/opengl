@@ -54,8 +54,13 @@ int main()
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     msh.draw();
-    // Draw ImGui
+    // Draw ImGui (populate `meshTriangle` from GUI input)
     GUI::Draw(vertices);
+    if (meshTriangle)
+    {
+      msh.insertNew();
+      meshTriangle = false; // consume the one-shot button press
+    }
 
     // buffer
     glfwSwapBuffers(window);

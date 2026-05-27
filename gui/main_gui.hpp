@@ -1,11 +1,11 @@
 #ifndef MAIN_GUI_HPP
 #define MAIN_GUI_HPP
+#include <gs_999.main/class/global.hpp>
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/imgui.h>
 
-class GUI
-{
+class GUI {
 public:
   //
   // Initialize Graphical User Interface

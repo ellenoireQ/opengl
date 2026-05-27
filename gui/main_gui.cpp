@@ -1,6 +1,7 @@
 #include "main_gui.hpp"
 #include "imgui.h"
 #include <cstdio>
+
 #include <utils/utility.hpp>
 
 static float myFloat = 0.5f;
@@ -13,6 +14,8 @@ void GUI::app(float matrix[]) {
   if (ImGui::BeginTabBar("AppTable")) {
     if (ImGui::BeginTabItem("Mesh")) {
       ImGui::Text("Mesh");
+      auto triangle = ImGui::Button("Triangle");
+      meshTriangle = triangle;
       ImGui::EndTabItem();
     }
 
