@@ -16,6 +16,15 @@ void GUI::app(float matrix[]) {
       ImGui::Text("Mesh");
       auto triangle = ImGui::Button("Triangle");
       meshTriangle = triangle;
+      ImGui::Text("X");
+
+      ImGui::PushItemWidth(-1);
+
+      ImGui::SliderFloat("##x", &xLoc, -1.0f, 1.0f);
+      ImGui::Text("Y");
+
+      ImGui::SliderFloat("##y", &yLoc, -1.0f, 1.0f);
+
       ImGui::EndTabItem();
     }
 

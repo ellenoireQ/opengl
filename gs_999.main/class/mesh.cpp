@@ -1,11 +1,11 @@
 #include "mesh.hpp"
+#include "gui/main_gui.hpp"
 #include <utils/get_vertex_data.hpp>
 
 MeshContainer Mesh::container{};
 MeshStructure Mesh::block{};
 
-void updateVerticesFromGui()
-{
+void updateVerticesFromGui() {
   const float *currentSize = GUI::getSizeArray();
   const float *currentColor = GUI::getColorArray();
 
@@ -24,8 +24,7 @@ void updateVerticesFromGui()
   vertices[17] = currentColor[2];
 }
 
-bool Mesh::init(MeshStructure &msh)
-{
+bool Mesh::init(MeshStructure &msh) {
   std::string vertexShaderSource = msh.vertex;
   std::string fragmentShaderSource = msh.fragment;
 
@@ -64,8 +63,7 @@ bool Mesh::init(MeshStructure &msh)
   int success;
   char infoLog[512];
   glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-  if (!success)
-  {
+  if (!success) {
     glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
     std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n"
               << infoLog << std::endl;
@@ -79,8 +77,7 @@ bool Mesh::init(MeshStructure &msh)
   glCompileShader(fragmentShader);
 
   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-  if (!success)
-  {
+  if (!success) {
     glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
     std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n"
               << infoLog << std::endl;
@@ -92,9 +89,10 @@ bool Mesh::init(MeshStructure &msh)
   glAttachShader(msh.shaderProgram, fragmentShader);
   glLinkProgram(msh.shaderProgram);
 
+  msh.offsetLoc = glGetUniformLocation(msh.shaderProgram, "offset");
+
   glGetProgramiv(msh.shaderProgram, GL_LINK_STATUS, &success);
-  if (!success)
-  {
+  if (!success) {
     glGetProgramInfoLog(msh.shaderProgram, 512, NULL, infoLog);
     std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n"
               << infoLog << std::endl;
@@ -111,10 +109,8 @@ bool Mesh::init(MeshStructure &msh)
   return true;
 }
 
-void Mesh::destroy()
-{
-  for (auto &i : container.mesh_block)
-  {
+void Mesh::destroy() {
+  for (auto &i : container.mesh_block) {
     glDeleteVertexArrays(1, &i.VAO);
     glDeleteBuffers(1, &i.VBO);
     glDeleteBuffers(1, &i.EBO);
@@ -122,8 +118,7 @@ void Mesh::destroy()
   }
 }
 
-void Mesh::insertNew()
-{
+void Mesh::insertNew() {
   block = MeshStructure{
       //
       .name = "123",
@@ -138,36 +133,35 @@ void Mesh::insertNew()
 
   // Copy current vertices data to this mesh
   updateVerticesFromGui();
-  for (int i = 0; i < 18; i++)
-  {
+  for (int i = 0; i < 18; i++) {
     block.vertices[i] = vertices[i];
   }
 
-  if (init(block))
-  {
+  if (init(block)) {
     container.mesh_block.push_back(block);
     std::cout << "Mesh spawned! Total meshes: " << container.mesh_block.size()
               << std::endl;
   }
 }
 
-void Mesh::draw()
-{
+void Mesh::draw() {
   updateVerticesFromGui();
 
-  for (size_t i = 0; i < container.mesh_block.size(); i++)
-  {
+  for (size_t i = 0; i < container.mesh_block.size(); i++) {
     auto &msh = container.mesh_block[i];
 
-    // Draw triangle
     glUseProgram(msh.shaderProgram);
 
-    if (i == 0)
-    {
+    float currentXLoc = GUI::getXLoc();
+    float currentYLoc = GUI::getYLoc();
+    glUniform2f(msh.offsetLoc, currentXLoc, currentYLoc);
+
+    if (i == 0) {
       glBindBuffer(GL_ARRAY_BUFFER, msh.VBO);
       glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
     }
 
+    // Draw triangle
     glBindVertexArray(msh.VAO);
     glDrawArrays(GL_TRIANGLES, 0, 3);
   }

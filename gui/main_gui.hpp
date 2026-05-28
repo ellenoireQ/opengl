@@ -5,6 +5,8 @@
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/imgui.h>
 
+inline float xLoc = 0.0f, yLoc = 0.0f;
+
 class GUI {
 public:
   //
@@ -23,6 +25,10 @@ public:
 
   // Get the color array values
   static const float *getColorArray();
+
+  // Get the location values
+  static float getXLoc() { return xLoc; }
+  static float getYLoc() { return yLoc; }
 };
 
 #endif // MAIN_GUI_HPP

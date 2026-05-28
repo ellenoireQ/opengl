@@ -18,8 +18,11 @@ static float vertices[] = {
 
 void updateVerticesFromGui();
 
-struct MeshStructure
-{
+struct Coord {
+  float x;
+  float y;
+};
+struct MeshStructure {
   const char *name;
   int width;
   int height;
@@ -29,18 +32,19 @@ struct MeshStructure
 
   unsigned int VAO, VBO, EBO;
   unsigned int shaderProgram;
-  
+  GLint offsetLoc;
+
   // Each mesh stores its own vertex data
   float vertices[18]; // 3 vertices * 6 floats (3 pos + 3 color)
+
+  struct Coord loc;
 };
 
-struct MeshContainer
-{
+struct MeshContainer {
   std::vector<MeshStructure> mesh_block;
 };
 
-class Mesh
-{
+class Mesh {
 public:
   bool init(MeshStructure &ms);
   void destroy();
