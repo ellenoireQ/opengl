@@ -15,16 +15,14 @@ static void framebuffer_size_callback(GLFWwindow *window, int width,
                                       int height);
 static void processInput(GLFWwindow *window);
 
-int main()
-{
+int main() {
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   GLFWwindow *window = glfwCreateWindow(800, 600, "Learn Open GL", NULL, NULL);
-  if (window == NULL)
-  {
+  if (window == NULL) {
     std::cout << "Failed to create GLFW Window" << std::endl;
     glfwTerminate();
     return -1;
@@ -32,8 +30,7 @@ int main()
 
   glfwMakeContextCurrent(window);
 
-  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-  {
+  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     std::cout << "Failed to initialize GLAD" << std::endl;
     return -2;
   }
@@ -45,8 +42,7 @@ int main()
   Mesh msh;
   msh.insertNew();
 
-  while (!glfwWindowShouldClose(window))
-  {
+  while (!glfwWindowShouldClose(window)) {
     // input
     processInput(window);
 
@@ -56,8 +52,7 @@ int main()
     msh.draw();
     // Draw ImGui (populate `meshTriangle` from GUI input)
     GUI::Draw(vertices);
-    if (meshTriangle)
-    {
+    if (meshTriangle) {
       msh.insertNew();
       meshTriangle = false; // consume the one-shot button press
     }
@@ -78,13 +73,11 @@ int main()
 
 // framebuffer_size_callback
 static void framebuffer_size_callback(GLFWwindow *window, int width,
-                                      int height)
-{
+                                      int height) {
   glViewport(0, 0, width, height);
 }
 
-static void processInput(GLFWwindow *window)
-{
+static void processInput(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     glfwSetWindowShouldClose(window, true);
 }

@@ -23,7 +23,7 @@ struct Coord {
   float y;
 };
 struct MeshStructure {
-  const char *name;
+  std::string name;
   int width;
   int height;
 

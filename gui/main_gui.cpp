@@ -10,12 +10,45 @@ static float size[9] = {0.5f,  -0.5f, 0.0f,  // vertex 1: x, y, z
                         -0.5f, -0.5f, 0.0f,  // vertex 2: x, y, z
                         0.0f,  0.5f,  0.0f}; // vertex 3: x, y, z
 
+void GUI::RegisterMeshOption(const std::string &label) {
+  meshOptions.push_back(label);
+  if (meshOptions.size() == 1) {
+    selectedMeshIndex = 0;
+  }
+}
+
 void GUI::app(float matrix[]) {
   if (ImGui::BeginTabBar("AppTable")) {
     if (ImGui::BeginTabItem("Mesh")) {
       ImGui::Text("Mesh");
       auto triangle = ImGui::Button("Triangle");
       meshTriangle = triangle;
+
+      if (selectedMeshIndex >= static_cast<int>(meshOptions.size())) {
+        selectedMeshIndex = meshOptions.empty()
+                                ? 0
+                                : static_cast<int>(meshOptions.size()) - 1;
+      }
+
+      const char *previewLabel = meshOptions.empty()
+                                     ? "No mesh"
+                                     : meshOptions[selectedMeshIndex].c_str();
+
+      if (ImGui::BeginCombo("Select mesh id", previewLabel)) {
+        for (int i = 0; i < static_cast<int>(meshOptions.size()); i++) {
+          const bool is_selected = (selectedMeshIndex == i);
+
+          if (ImGui::Selectable(meshOptions[i].c_str(), is_selected)) {
+            selectedMeshIndex = i;
+          }
+
+          if (is_selected) {
+            ImGui::SetItemDefaultFocus();
+          }
+        }
+        ImGui::EndCombo();
+      }
+
       ImGui::Text("X");
 
       ImGui::PushItemWidth(-1);

@@ -4,8 +4,12 @@
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 #include <imgui/imgui.h>
+#include <string>
+#include <vector>
 
 inline float xLoc = 0.0f, yLoc = 0.0f;
+inline std::vector<std::string> meshOptions;
+inline int selectedMeshIndex = 0;
 
 class GUI {
 public:
@@ -29,6 +33,10 @@ public:
   // Get the location values
   static float getXLoc() { return xLoc; }
   static float getYLoc() { return yLoc; }
+
+  static int getSelectedMeshIndex() { return selectedMeshIndex; }
+
+  static void RegisterMeshOption(const std::string &label);
 };
 
 #endif // MAIN_GUI_HPP

@@ -1,5 +1,6 @@
 #include "mesh.hpp"
 #include "gui/main_gui.hpp"
+#include <string>
 #include <utils/get_vertex_data.hpp>
 
 MeshContainer Mesh::container{};
@@ -119,9 +120,10 @@ void Mesh::destroy() {
 }
 
 void Mesh::insertNew() {
+  const int meshId = static_cast<int>(container.mesh_block.size()) + 1;
   block = MeshStructure{
       //
-      .name = "123",
+      .name = std::to_string(meshId),
       .width = 400,
       .height = 400,
       .fragment = get_vertex_data("gs_999.main/fragment.glsl"),
@@ -141,6 +143,7 @@ void Mesh::insertNew() {
     container.mesh_block.push_back(block);
     std::cout << "Mesh spawned! Total meshes: " << container.mesh_block.size()
               << std::endl;
+    GUI::RegisterMeshOption(block.name);
   }
 }
 
