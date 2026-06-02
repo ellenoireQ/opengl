@@ -17,6 +17,23 @@ void GUI::RegisterMeshOption(const std::string &label) {
   }
 }
 
+void GUI::setLocation(float x, float y) {
+  xLoc = x;
+  yLoc = y;
+}
+
+void GUI::setSizeArray(const float sizeData[9]) {
+  for (int i = 0; i < 9; i++) {
+    size[i] = sizeData[i];
+  }
+}
+
+void GUI::setColorArray(const float colorData[3]) {
+  for (int i = 0; i < 3; i++) {
+    color[i] = colorData[i];
+  }
+}
+
 void GUI::app(float matrix[]) {
   if (ImGui::BeginTabBar("AppTable")) {
     if (ImGui::BeginTabItem("Mesh")) {

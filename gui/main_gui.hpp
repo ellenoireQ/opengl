@@ -34,6 +34,10 @@ public:
   static float getXLoc() { return xLoc; }
   static float getYLoc() { return yLoc; }
 
+  static void setLocation(float x, float y);
+  static void setSizeArray(const float sizeData[9]);
+  static void setColorArray(const float colorData[3]);
+
   static int getSelectedMeshIndex() { return selectedMeshIndex; }
 
   static void RegisterMeshOption(const std::string &label);

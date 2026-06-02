@@ -16,7 +16,7 @@ static float vertices[] = {
     0.0f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f  // top
 };
 
-void updateVerticesFromGui();
+void updateVerticesFromGui(float targetVertices[]);
 
 struct Coord {
   float x;

@@ -5,24 +5,36 @@
 
 MeshContainer Mesh::container{};
 MeshStructure Mesh::block{};
+static int lastSyncedMeshIndex = -1;
 
-void updateVerticesFromGui() {
+void updateVerticesFromGui(float targetVertices[]) {
   const float *currentSize = GUI::getSizeArray();
   const float *currentColor = GUI::getColorArray();
 
-  vertices[0] = currentSize[0];
-  vertices[1] = currentSize[1];
-  vertices[2] = currentSize[2];
-  vertices[6] = currentSize[3];
-  vertices[7] = currentSize[4];
-  vertices[8] = currentSize[5];
-  vertices[12] = currentSize[6];
-  vertices[13] = currentSize[7];
-  vertices[14] = currentSize[8];
+  targetVertices[0] = currentSize[0];
+  targetVertices[1] = currentSize[1];
+  targetVertices[2] = currentSize[2];
+  targetVertices[6] = currentSize[3];
+  targetVertices[7] = currentSize[4];
+  targetVertices[8] = currentSize[5];
+  targetVertices[12] = currentSize[6];
+  targetVertices[13] = currentSize[7];
+  targetVertices[14] = currentSize[8];
 
-  vertices[3] = currentColor[0];
-  vertices[10] = currentColor[1];
-  vertices[17] = currentColor[2];
+  targetVertices[3] = currentColor[0];
+  targetVertices[10] = currentColor[1];
+  targetVertices[17] = currentColor[2];
+}
+
+static void syncGuiFromMesh(const MeshStructure &msh) {
+  const float sizeData[9] = {msh.vertices[0],  msh.vertices[1],  msh.vertices[2],
+                             msh.vertices[6],  msh.vertices[7],  msh.vertices[8],
+                             msh.vertices[12], msh.vertices[13], msh.vertices[14]};
+  const float colorData[3] = {msh.vertices[3], msh.vertices[10], msh.vertices[17]};
+
+  GUI::setSizeArray(sizeData);
+  GUI::setColorArray(colorData);
+  GUI::setLocation(msh.loc.x, msh.loc.y);
 }
 
 bool Mesh::init(MeshStructure &msh) {
@@ -134,10 +146,8 @@ void Mesh::insertNew() {
   };
 
   // Copy current vertices data to this mesh
-  updateVerticesFromGui();
-  for (int i = 0; i < 18; i++) {
-    block.vertices[i] = vertices[i];
-  }
+  updateVerticesFromGui(block.vertices);
+  block.loc = {GUI::getXLoc(), GUI::getYLoc()};
 
   if (init(block)) {
     container.mesh_block.push_back(block);
@@ -148,21 +158,27 @@ void Mesh::insertNew() {
 }
 
 void Mesh::draw() {
-  updateVerticesFromGui();
+  const int selectedMeshIndex = GUI::getSelectedMeshIndex();
 
   for (size_t i = 0; i < container.mesh_block.size(); i++) {
     auto &msh = container.mesh_block[i];
 
+    if (static_cast<int>(i) == selectedMeshIndex) {
+      if (lastSyncedMeshIndex != selectedMeshIndex) {
+        syncGuiFromMesh(msh);
+        lastSyncedMeshIndex = selectedMeshIndex;
+      }
+      msh.loc.x = GUI::getXLoc();
+      msh.loc.y = GUI::getYLoc();
+      updateVerticesFromGui(msh.vertices);
+
+      glBindBuffer(GL_ARRAY_BUFFER, msh.VBO);
+      glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(msh.vertices), msh.vertices);
+    }
+
     glUseProgram(msh.shaderProgram);
 
-    float currentXLoc = GUI::getXLoc();
-    float currentYLoc = GUI::getYLoc();
-    glUniform2f(msh.offsetLoc, currentXLoc, currentYLoc);
-
-    if (i == 0) {
-      glBindBuffer(GL_ARRAY_BUFFER, msh.VBO);
-      glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-    }
+    glUniform2f(msh.offsetLoc, msh.loc.x, msh.loc.y);
 
     // Draw triangle
     glBindVertexArray(msh.VAO);
