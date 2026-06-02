@@ -42,22 +42,24 @@ target_include_directories(my_app PRIVATE
     ./
     ./imgui
     ./imgui/backends
-    glfw-3.4.bin/include/
     gs_999.main/class
 
 )
 
 if(WIN32)
+    target_include_directories(my_app PRIVATE
+        glfw-3.4.bin/include/
+    )
     target_link_libraries(my_app PRIVATE
         OpenGL::GL
         ${CMAKE_CURRENT_SOURCE_DIR}/glfw-3.4.bin/lib-mingw-w64/libglfw3.a
     )
 else()
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(GLFW3 REQUIRED IMPORTED_TARGET glfw3)
     target_link_libraries(my_app PRIVATE
         OpenGL::GL
-        X11
-        pthread
-        Xrandr
-        Xi
+        PkgConfig::GLFW3
+        ${CMAKE_DL_LIBS}
     )
 endif()
